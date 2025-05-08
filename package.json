@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-label": "^2.1.4",
     "@radix-ui/react-slot": "^1.2.0",
     "@radix-ui/react-tabs": "^1.1.9",
@@ -19,11 +20,12 @@
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.56.1",
+    "react-hook-form": "^7.56.3",
     "react-redux": "^9.2.0",
     "react-toastify": "^11.0.5",
     "tailwind-merge": "^3.2.0",
-    "trading-app-frontend": "file:"
+    "trading-app-frontend": "file:",
+    "zod": "^3.24.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

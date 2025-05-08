@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Home() {
 
-  const [register,state] = useRegisterMutation();
+
 
   const newUser = {
     username:"Reakjhjkkjjkjlct01",
@@ -14,12 +14,7 @@ export default function Home() {
   }
 
   const handleRegister = async () => {
-    try {
-      const response = await register(newUser);
-      console.log("Registration successful:", response);
-    } catch (error) {
-      console.error("Registration failed:", error);
-    }
+
   };
   
 
