@@ -27,9 +27,7 @@ export const authApi = createApi({
     activate: builder.query({
       query: (token: string) => "/auth/activate/" + token,
       transformResponse: (res: AuthResponse) => {
-        document.cookie = `access_token=${res.token}; path=/; max-age=3600`;
         toast.success(res.message);
-
         return res;
       },
       transformErrorResponse: (res: AuthErrorResponse) => {
