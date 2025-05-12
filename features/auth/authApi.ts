@@ -2,16 +2,15 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { toast } from "react-toastify";
 
 interface AuthResponse extends Response {
-    token: string;
-    message: string;
-    data?: Record<string, unknown>;
+  token: string;
+  message: string;
+  data?: Record<string, unknown>;
 }
 interface AuthErrorResponse extends Response {
-    data: {
-        message: string;
-    };
+  data: {
+    message: string;
+  };
 }
-
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -25,6 +24,19 @@ export const authApi = createApi({
   }),
 
   endpoints: (builder) => ({
+    activate: builder.query({
+      query: (token: string) => "/auth/activate/" + token,
+      transformResponse: (res: AuthResponse) => {
+        document.cookie = `access_token=${res.token}; path=/; max-age=3600`;
+        toast.success(res.message);
+
+        return res;
+      },
+      transformErrorResponse: (res: AuthErrorResponse) => {
+        toast.error(res.data.message);
+        return res;
+      },
+    }),
 
     login: builder.mutation({
       query: (user) => {
@@ -41,7 +53,6 @@ export const authApi = createApi({
         return res;
       },
       transformErrorResponse: (res: AuthErrorResponse) => {
-     
         toast.error(res.data.message);
         return res;
       },
@@ -60,7 +71,7 @@ export const authApi = createApi({
         return res;
       },
       transformErrorResponse: (res: AuthErrorResponse) => {
-        console.log("ERR!",res)
+        console.log("ERR!", res);
         toast.error(res.data.message);
         return res;
       },
@@ -68,4 +79,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation, useLazyActivateQuery } = authApi;
