@@ -16,6 +16,7 @@ import Field from "./Field";
 import { registerSchema } from "../schema/registerSchema";
 import { loginSchema } from "../schema/loginSchema";
 import { loginForm } from "../data/loginForm";
+import { useRouter } from "next/navigation";
 
 interface AuthFormData {
   email: string;
@@ -25,6 +26,7 @@ interface AuthFormData {
 
 interface AuthFormProps {
   mode: "login" | "register";
+
 }
 
 const values = {
@@ -48,6 +50,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
   const object = values[mode];
 
   const [trigger, state] = object.useMutation();
+  const router = useRouter();
 
   const {
     register,
@@ -60,6 +63,10 @@ const AuthForm = ({ mode }: AuthFormProps) => {
   const onSubmit = async (data: AuthFormData) => {
     try {
       await trigger(data);
+      if (mode === "login") {
+        router.push("/");
+      }
+
     } catch (error) {
       console.error("Error:", error);
     }
