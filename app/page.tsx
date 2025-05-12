@@ -1,30 +1,12 @@
 "use client";
-import { useRegisterMutation } from "@/features/auth/authApi";
 import Image from "next/image";
 
 export default function Home() {
 
 
-
-  const newUser = {
-    username:"Reakjhjkkjjkjlct01",
-    password:"Test1234@",
-    email:"react0lkjkjkjkhkj1@wp.pl",
-    account_type:"admin"
-  }
-
-  const handleRegister = async () => {
-
-  };
-  
-
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-     
-       {state.isLoading && <p>Loading...</p>}
-       {state.isError && <p>Error</p>}
-
-       <button onClick={handleRegister}>Zarejestruj</button>
+   
      
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <Image
@@ -36,9 +18,6 @@ export default function Home() {
           priority
         />
 
-
-
-      
       </main>
     </div>
   );
