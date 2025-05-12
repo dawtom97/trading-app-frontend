@@ -45,7 +45,7 @@ export const authApi = createApi({
         };
       },
       transformResponse: (res: AuthResponse) => {
-        document.cookie = `access_token=${res.token}; path=/; max-age=3600`;
+        document.cookie = `access_token=${res.data}; path=/; max-age=3600`;
         toast.success(res.message);
 
         return res;
