@@ -5,7 +5,7 @@ import { MarketOverview } from "@/components/custom/MarketOverview";
 import { RecentTransactions } from "@/components/custom/RecentTransactions";
 import { TradingChart } from "@/components/custom/TradingChart";
 import { TradingChat } from "@/components/custom/TradingChat";
-import { WatchList } from "@/components/custom/WatchList";
+import { WatchList } from "@/features/crypto/components/WatchList";
 import { useState } from "react";
 
 export default function Home() {
@@ -53,11 +53,11 @@ export default function Home() {
     .filter((widget) => widget.column === 1)
     .sort((a, b) => a.order - b.order);
 
-  const column2Widgets = widgets
-    .filter((widget) => widget.column === 2)
-    .sort((a, b) => a.order - b.order);
+  // const column2Widgets = widgets
+  //   .filter((widget) => widget.column === 2)
+  //   .sort((a, b) => a.order - b.order);
 
-  const moveWidget = (draggedId, targetId) => {
+  const moveWidget = (draggedId: string, targetId: string) => {
     if (draggedId === targetId) return;
 
     setWidgets((prevWidgets) => {
