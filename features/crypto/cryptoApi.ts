@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const cryptoApi = createApi({
   reducerPath: "cryptoApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_COIN_MARKET_URL + "/cryptocurrency",
+    baseUrl: "/api",
     prepareHeaders: (headers) => {
       headers.set("Content-Type", "application/json");
       headers.set(
@@ -16,7 +16,7 @@ export const cryptoApi = createApi({
   }),
   endpoints: (builder) => ({
     getCryptos: builder.query({
-      query: () => "/listings/latest",
+      query: () => "/cryptos/listings",
       transformResponse: (res) => {
         const obj = {
             crypto: res.data,
