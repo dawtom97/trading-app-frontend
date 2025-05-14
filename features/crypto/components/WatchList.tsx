@@ -20,8 +20,10 @@ export function WatchList() {
 
   const {data, isLoading} = useGetCryptosQuery(null)
 
+  console.log(data)
+
   return (
-    <div className="h-full">
+    <div className="max-h-[500px] overflow-y-scroll">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-800">Watchlist</h2>
         <Button variant="ghost" size="sm" className="text-green-600 hover:text-green-700">
@@ -43,8 +45,7 @@ export function WatchList() {
             </div>
             <div className="text-right">
               <div className="font-medium text-gray-900">${item?.quote.USD.price.toFixed(2)}</div>
-              <div className={`text-sm ${item?.quote?.USD?.volume_change_24h > 0 ? "text-green-600" : "text-red-600"}`}>
-                {item?.quote?.USD?.volume_change_24h > 0 ? "+" : "-"}
+              <div className={`text-sm ${item?.quote?.USD?.percent_change_24h > 0 ? "text-green-600" : "text-red-600"}`}>
                 {item?.quote?.USD?.percent_change_24h.toFixed(2)}%
               </div>
             </div>
