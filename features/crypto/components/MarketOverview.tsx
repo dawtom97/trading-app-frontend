@@ -3,7 +3,7 @@ import { useGetCryptosQuery } from "../cryptoApi";
 import { Crypto } from "../types/Crypto";
 
 export function MarketOverview() {
-  const { data, isLoading } = useGetCryptosQuery(null);
+  const { data } = useGetCryptosQuery(null);
 
   console.log(data);
 
@@ -27,7 +27,7 @@ export function MarketOverview() {
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             {data?.crypto?.map((x: Crypto) => (
               <tr key={x.symbol} className="border-b border-gray-100">
                 <td className="py-3">

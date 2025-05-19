@@ -19,13 +19,23 @@ export const cryptoApi = createApi({
       query: () => "/cryptos/listings",
       transformResponse: (res) => {
         const obj = {
-            crypto: res.data,
-            timestamp: res.status.timestamp,
-        }
-        return obj
-      }
+          crypto: res.data,
+          timestamp: res.status.timestamp,
+        };
+        return obj;
+      },
+    }),
+    getQuotes: builder.query({
+      query: () => "/cryptos/quotes",
+      transformResponse: (res) => {
+        // const obj = {
+        //   crypto: res.data,
+        //   timestamp: res.status.timestamp,
+        // };
+        return res;
+      },
     }),
   }),
 });
 
-export const { useGetCryptosQuery } = cryptoApi;
+export const { useGetCryptosQuery, useGetQuotesQuery } = cryptoApi;
