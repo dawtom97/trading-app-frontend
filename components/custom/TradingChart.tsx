@@ -54,9 +54,6 @@ export function TradingChart() {
     ).toFixed(2),
   }));
 
-  console.log(sortedByPrice);
-  console.log(currencies);
-
   return (
     <Card>
       <CardHeader>

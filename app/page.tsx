@@ -4,9 +4,9 @@ import { DraggableWidget } from "@/components/custom/DraggableWidget";
 import { MarketOverview } from "@/features/crypto/components/MarketOverview";
 import { RecentTransactions } from "@/components/custom/RecentTransactions";
 import { TradingChart } from "@/components/custom/TradingChart";
-import { TradingChat } from "@/components/custom/TradingChat";
 import { WatchList } from "@/features/crypto/components/WatchList";
 import { useState } from "react";
+import { PieChartWidget } from "@/components/custom/PieChartWidged";
 
 export default function Home() {
   const [widgets, setWidgets] = useState([
@@ -35,9 +35,9 @@ export default function Home() {
       order: 2,
     },
     {
-      id: "chat",
-      title: "Trading Chat",
-      content: <TradingChat />,
+      id: "pie-chart",
+      title: "Pie Chart",
+      content: <PieChartWidget />,
       column: 1,
       order: 3,
     },
