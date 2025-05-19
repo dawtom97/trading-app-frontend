@@ -3,24 +3,13 @@
 import { Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useGetCryptosQuery } from "../cryptoApi"
+import { Crypto } from "../types/Crypto"
 
-interface Crypto {
-  symbol: string,
-  name: string,
-  quote: {
-    USD: {
-      price: number,
-      volume_change_24h: number,
-      percent_change_24h: number,
-    }
-  }
-}
+
 
 export function WatchList() {
 
   const {data, isLoading} = useGetCryptosQuery(null)
-
-  console.log(data)
 
   return (
     <div className="max-h-[500px] overflow-y-scroll">

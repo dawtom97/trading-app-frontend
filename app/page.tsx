@@ -1,7 +1,7 @@
 "use client";
 import { DashboardHeader } from "@/components/custom/DashboardHeader";
 import { DraggableWidget } from "@/components/custom/DraggableWidget";
-import { MarketOverview } from "@/components/custom/MarketOverview";
+import { MarketOverview } from "@/features/crypto/components/MarketOverview";
 import { RecentTransactions } from "@/components/custom/RecentTransactions";
 import { TradingChart } from "@/components/custom/TradingChart";
 import { TradingChat } from "@/components/custom/TradingChat";
@@ -11,17 +11,10 @@ import { useState } from "react";
 export default function Home() {
   const [widgets, setWidgets] = useState([
     {
-      id: "chart",
-      title: "Trading Chart",
-      content: <TradingChart />,
-      column: 1,
-      order: 1,
-    },
-    {
       id: "marketAndWatchlist",
       title: "",
       content: (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
           <div className="h-full">
             <MarketOverview />
           </div>
@@ -30,6 +23,14 @@ export default function Home() {
           </div>
         </div>
       ),
+      column: 1,
+      order: 1,
+      span: 2, // nowa właściwość niestandardowa
+    },
+    {
+      id: "chart",
+      title: "Trading Chart",
+      content: <TradingChart />,
       column: 1,
       order: 2,
     },
@@ -95,14 +96,18 @@ export default function Home() {
         <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full">
           <div className="grid lg:grid-cols-2 gap-6 w-full">
             {column1Widgets.map((widget) => (
-              <DraggableWidget
+              <div
                 key={widget.id}
-                id={widget.id}
-                title={widget.title}
-                onDrop={moveWidget}
+                className={`w-full ${widget.span === 2 ? "lg:col-span-2" : ""}`}
               >
-                {widget.content}
-              </DraggableWidget>
+                <DraggableWidget
+                  id={widget.id}
+                  title={widget.title}
+                  onDrop={moveWidget}
+                >
+                  {widget.content}
+                </DraggableWidget>
+              </div>
             ))}
           </div>
         </main>
