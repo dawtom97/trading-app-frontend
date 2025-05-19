@@ -13,25 +13,50 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { date: "2024-07-15", running: 450, swimming: 300 },
-  { date: "2024-07-16", running: 380, swimming: 420 },
-  { date: "2024-07-17", running: 520, swimming: 120 },
-  { date: "2024-07-18", running: 140, swimming: 550 },
-  { date: "2024-07-19", running: 600, swimming: 350 },
-  { date: "2024-07-20", running: 480, swimming: 400 },
-];
+import { useGetCryptosQuery } from "@/features/crypto/cryptoApi";
+
+interface CurrencyForChart {
+  symbol: string;
+  quote: {
+    USD: {
+      price: number;
+      percent_change_90d: number;
+    };
+  };
+}
+
 const chartConfig = {
-  running: {
-    label: "Running",
+  price: {
+    label: "Price",
     color: "aqua",
   },
-  swimming: {
-    label: "Swimming",
+  oldPrice: {
+    label: "Old Price",
     color: "blue",
   },
 } satisfies ChartConfig;
 export function TradingChart() {
+  const { data } = useGetCryptosQuery(null);
+
+  const sortedByPrice = data?.crypto
+    ?.slice()
+    .sort((a: CurrencyForChart, b: CurrencyForChart) => {
+      return b.quote.USD.price - a.quote.USD.price;
+    })
+    .slice(1, 6);
+
+  const currencies = sortedByPrice?.map((item: CurrencyForChart) => ({
+    symbol: item.symbol,
+    oldPrice: item.quote.USD.price.toFixed(2),
+    price: (
+      item.quote.USD.price *
+      (1 + item.quote.USD.percent_change_90d / 100)
+    ).toFixed(2),
+  }));
+
+  console.log(sortedByPrice);
+  console.log(currencies);
+
   return (
     <Card>
       <CardHeader>
@@ -42,28 +67,23 @@ export function TradingChart() {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart accessibilityLayer data={currencies}>
             <XAxis
-              dataKey="date"
+              dataKey="symbol"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => {
-                return new Date(value).toLocaleDateString("en-US", {
-                  weekday: "short",
-                });
-              }}
             />
             <Bar
-              dataKey="running"
+              dataKey="oldPrice"
               stackId="a"
-              fill="var(--color-running)"
+              fill="aqua"
               radius={[0, 0, 4, 4]}
             />
             <Bar
-              dataKey="swimming"
+              dataKey="price"
               stackId="a"
-              fill="var(--color-swimming)"
+              fill="greenyellow"
               radius={[4, 4, 0, 0]}
             />
             <ChartTooltip
