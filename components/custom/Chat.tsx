@@ -1,15 +1,24 @@
-"use client"
+"use client";
 import React, { useEffect } from "react";
 import { io } from "socket.io-client";
 
 const socket = io("http://localhost:5000");
 const users = ["alice", "jan", "john"];
 
-const Chat = () => {
-  const [username, setUsername] = React.useState("alice");
+interface ChatProps {
+  user: {
+    user_id: string;
+    email: string;
+    exp: number;
+  };
+}
+
+const Chat = ({ user }: ChatProps) => {
   const [selectedUser, setSelectedUser] = React.useState("jan");
   const [messages, setMessages] = React.useState<any>([]);
   const [message, setMessage] = React.useState("");
+
+  const {email: username} = user;
 
   useEffect(() => {
     socket.emit("join", { username });

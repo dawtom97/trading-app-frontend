@@ -13,5 +13,5 @@ export function middleware(request: NextRequest) {
 
 // Opcjonalnie: określ, gdzie middleware ma działać
 export const config = {
-  matcher: ['/', '/dashboard', '/profile'], // dopasuj do ścieżek, które chcesz chronić
+  matcher: ['/', '/dashboard', '/profile','/chat'], // dopasuj do ścieżek, które chcesz chronić
 }
