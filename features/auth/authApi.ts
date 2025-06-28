@@ -36,6 +36,17 @@ export const authApi = createApi({
       },
     }),
 
+    allUsers: builder.query({
+      query: () => "/auth/all-users",
+      transformResponse: (res: AuthResponse) => {
+        return res.data;
+      },
+      transformErrorResponse: (res: AuthErrorResponse) => {
+        toast.error(res.data.message);
+        return res;
+      },
+    }),
+
     login: builder.mutation({
       query: (user) => {
         return {
@@ -77,4 +88,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useLazyActivateQuery } = authApi;
+export const { useLoginMutation, useRegisterMutation, useLazyActivateQuery, useAllUsersQuery } = authApi;

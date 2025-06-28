@@ -3,15 +3,17 @@ import Chat from "@/components/custom/Chat";
 import React, { useEffect } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import { useAllUsersQuery } from "@/features/auth/authApi";
 
 interface UserPayload {
-    user_id: string;
-    email: string;
-    exp: number;
+  user_id: string;
+  email: string;
+  exp: number;
 }
 
 const ChatRoom = () => {
   const [user, setUser] = React.useState<UserPayload | null>(null);
+  const { data: allUsers } = useAllUsersQuery(undefined);
 
   useEffect(() => {
     const token = Cookies.get("access_token");
@@ -32,7 +34,7 @@ const ChatRoom = () => {
 
   return (
     <div>
-      <Chat user={user} />
+      <Chat user={user} allUsers={allUsers}/>
     </div>
   );
 };
