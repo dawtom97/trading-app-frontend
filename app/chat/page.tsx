@@ -4,23 +4,25 @@ import React, { useEffect } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useAllUsersQuery } from "@/features/auth/authApi";
+import { User } from "@/components/custom/chat/types/User.types";
 
-interface UserPayload {
-  user_id: string;
-  email: string;
-  exp: number;
+
+export type Props = {
+  data: User[];
 }
 
 const ChatRoom = () => {
-  const [user, setUser] = React.useState<UserPayload | null>(null);
-  const { data: allUsers } = useAllUsersQuery(undefined);
+  const [user, setUser] = React.useState<User | null>(null);
+  const { data: allUsers } = useAllUsersQuery<Props>(undefined);
+
+  const filteredUsers = allUsers?.filter((x) => x.email !== user?.email);
 
   useEffect(() => {
     const token = Cookies.get("access_token");
 
     if (token) {
       try {
-        const decoded = jwtDecode<UserPayload>(token);
+        const decoded = jwtDecode<User>(token);
         setUser(decoded);
       } catch (error) {
         console.log(error);
@@ -34,7 +36,7 @@ const ChatRoom = () => {
 
   return (
     <div>
-      <Chat user={user} allUsers={allUsers}/>
+      <Chat user={user} allUsers={filteredUsers}/>
     </div>
   );
 };
