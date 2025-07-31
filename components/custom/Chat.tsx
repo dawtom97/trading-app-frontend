@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { io } from "socket.io-client";
 import { RecipientsTable } from "./chat/RecipientsTable";
 import { User } from "./chat/types/User.types";
+import { useGetConversationQuery, useLazyGetConversationQuery } from "@/features/chat/chatApi";
 
 
 const socket = io("http://localhost:5000");
@@ -17,12 +18,23 @@ const Chat = ({ user, allUsers }: ChatProps) => {
   const [messages, setMessages] = React.useState<any>([]);
   const [message, setMessage] = React.useState("");
 
+  const [showConversation, conversationState] = useLazyGetConversationQuery();
+
   const { email: username } = user;
+
+  const handleGetOldMessages = async () => {
+    if (!selectedUser) return;
+    const {data} = await showConversation({sender: username, recipient: selectedUser.email});
+    setMessages(data?.messages)
+  }
+
 
   useEffect(() => {
     if (!selectedUser) return;
 
     socket.emit("join", { username });
+
+    handleGetOldMessages();
 
     socket.on("private_message", (data) => {
       const { sender, recipient, text } = data;
