@@ -1,7 +1,7 @@
-import Link from "next/link"
-import { Bell, Menu, Search, User } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import Link from "next/link";
+import { Bell, Menu, Search, ShoppingBasket, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export function DashboardHeader() {
   return (
@@ -30,22 +30,34 @@ export function DashboardHeader() {
           <nav className="hidden md:flex">
             <ul className="flex gap-6">
               <li>
-                <Link href="/dashboard" className="text-sm font-medium text-gray-900 hover:text-green-600">
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-medium text-gray-900 hover:text-green-600"
+                >
                   Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="/markets" className="text-sm font-medium text-gray-500 hover:text-green-600">
+                <Link
+                  href="/markets"
+                  className="text-sm font-medium text-gray-500 hover:text-green-600"
+                >
                   Markets
                 </Link>
               </li>
               <li>
-                <Link href="/portfolio" className="text-sm font-medium text-gray-500 hover:text-green-600">
+                <Link
+                  href="/portfolio"
+                  className="text-sm font-medium text-gray-500 hover:text-green-600"
+                >
                   Portfolio
                 </Link>
               </li>
               <li>
-                <Link href="/news" className="text-sm font-medium text-gray-500 hover:text-green-600">
+                <Link
+                  href="/news"
+                  className="text-sm font-medium text-gray-500 hover:text-green-600"
+                >
                   News
                 </Link>
               </li>
@@ -64,17 +76,33 @@ export function DashboardHeader() {
           <Button variant="ghost" size="icon" className="text-gray-500">
             <Bell className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="text-gray-500 md:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-gray-500 md:hidden"
+          >
             <Search className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="text-gray-500 md:hidden">
+
+          <Button variant="ghost" size="icon" className="text-gray-500">
+            <Link href="/konto/koszyk">
+              <ShoppingBasket className="h-5 w-5" />
+            </Link>
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-gray-500 md:hidden"
+          >
             <Menu className="h-5 w-5" />
           </Button>
+
           <Button variant="ghost" size="icon" className="rounded-full">
             <User className="h-5 w-5" />
           </Button>
         </div>
       </div>
     </header>
-  )
+  );
 }

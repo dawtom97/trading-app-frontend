@@ -1,5 +1,4 @@
 "use client";
-import { DashboardHeader } from "@/components/custom/DashboardHeader";
 import { DraggableWidget } from "@/components/custom/DraggableWidget";
 import { MarketOverview } from "@/features/crypto/components/MarketOverview";
 import { RecentTransactions } from "@/components/custom/RecentTransactions";
@@ -90,7 +89,6 @@ export default function Home() {
 
   return (
     <div className="lg:w-[80%] w-[95%] mx-auto">
-      <DashboardHeader />
 
       <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen gap-16 font-[family-name:var(--font-geist-sans)] w-full">
         <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full">

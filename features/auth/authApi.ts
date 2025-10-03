@@ -85,7 +85,24 @@ export const authApi = createApi({
         return res;
       },
     }),
+
+    me: builder.query({
+      query: () => "/auth/me",
+      transformResponse: (res: AuthResponse) => {
+        return res.data; // tutaj masz obiekt usera
+      },
+      transformErrorResponse: (res: AuthErrorResponse) => {
+        toast.error(res.data.message);
+        return res;
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useLazyActivateQuery, useAllUsersQuery } = authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useLazyActivateQuery,
+  useAllUsersQuery,
+  useMeQuery
+} = authApi;

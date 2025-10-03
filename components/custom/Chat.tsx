@@ -3,8 +3,7 @@ import React, { useEffect } from "react";
 import { io } from "socket.io-client";
 import { RecipientsTable } from "./chat/RecipientsTable";
 import { User } from "./chat/types/User.types";
-import { useGetConversationQuery, useLazyGetConversationQuery } from "@/features/chat/chatApi";
-
+import { useLazyGetConversationQuery } from "@/features/chat/chatApi";
 
 const socket = io("http://localhost:5000");
 
@@ -12,37 +11,73 @@ interface ChatProps {
   user: User;
   allUsers: User[];
 }
+interface Message {
+  recipient: {
+    username: string;
+    email: string;
+    account_type:string;
+    is_active: boolean
+  };
+  sender: string;
+  text: string;
+  timestamp: {
+    $date: string
+  }
+}
 
 const Chat = ({ user, allUsers }: ChatProps) => {
   const [selectedUser, setSelectedUser] = React.useState<User | null>(null);
-  const [messages, setMessages] = React.useState<any>([]);
+  const [messages, setMessages] = React.useState<Message[]>([]);
   const [message, setMessage] = React.useState("");
 
-  const [showConversation, conversationState] = useLazyGetConversationQuery();
+  // przechowujemy licznik nieprzeczytanych wiadomości { email: liczba }
+  const [unread, setUnread] = React.useState<Record<string, number>>({});
 
+  const [showConversation] = useLazyGetConversationQuery();
   const { email: username } = user;
 
   const handleGetOldMessages = async () => {
     if (!selectedUser) return;
-    const {data} = await showConversation({sender: username, recipient: selectedUser.email});
-    setMessages(data?.messages)
-  }
-
+    const { data } = await showConversation({
+      sender: username,
+      recipient: selectedUser.email,
+    });
+    setMessages(data?.messages || []);
+  };
 
   useEffect(() => {
     if (!selectedUser) return;
 
     socket.emit("join", { username });
-
     handleGetOldMessages();
 
     socket.on("private_message", (data) => {
       const { sender, recipient, text } = data;
-      if (
+
+      const isForCurrentChat =
         (sender === username && recipient.email === selectedUser.email) ||
-        (sender === selectedUser.email && recipient.email === username)
-      ) {
-        setMessages((prevMessages) => [...prevMessages, { sender, text }]);
+        (sender === selectedUser.email && recipient.email === username);
+
+      if (isForCurrentChat) {
+        // aktywny czat → pokaż wiadomość
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender,
+            recipient,
+            text,
+            timestamp: { $date: new Date().toISOString() }
+          }
+        ]);
+      } else if (sender !== username) {
+        // 🔔 nowa wiadomość od innego usera
+        const audio = new Audio("/notification.mp3");
+        audio.play();
+
+        setUnread((prev) => ({
+          ...prev,
+          [sender]: (prev[sender] || 0) + 1, // zwiększ licznik
+        }));
       }
     });
 
@@ -52,7 +87,7 @@ const Chat = ({ user, allUsers }: ChatProps) => {
   }, [username, selectedUser]);
 
   const sendMessage = () => {
-    if (message.trim() === "") return;
+    if (message.trim() === "" || !selectedUser) return;
 
     const payload = {
       sender: username,
@@ -66,15 +101,25 @@ const Chat = ({ user, allUsers }: ChatProps) => {
 
   const handleSelectUser = (user: User) => {
     setMessages([]);
-    // pobieram wiadomości z serwera dla wybranego użytkownika
     setSelectedUser(user);
+
+    // wyzeruj licznik nieprzeczytanych wiadomości dla tego usera
+    setUnread((prev) => {
+      const newState = { ...prev };
+      newState[user.email] = 0;
+      return newState;
+    });
   };
 
   return (
     <div style={{ padding: 20 }}>
       <h2>Logged in as: {username}</h2>
 
-      <RecipientsTable handleSelect={handleSelectUser} data={allUsers} />
+      <RecipientsTable
+        handleSelect={handleSelectUser}
+        data={allUsers}
+        unread={unread}
+      />
 
       <div style={{ flex: 1, padding: 20 }}>
         {selectedUser && (

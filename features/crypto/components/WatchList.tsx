@@ -4,12 +4,14 @@ import { Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useGetCryptosQuery } from "../cryptoApi"
 import { Crypto } from "../types/Crypto"
+import { useAllFavsQuery } from "@/features/favourites/favouritesApi"
 
 
 
 export function WatchList() {
 
   const {data, isLoading} = useGetCryptosQuery(null)
+  const {data:favs } = useAllFavsQuery(null);
 
   return (
     <div className="max-h-[500px] overflow-y-scroll">

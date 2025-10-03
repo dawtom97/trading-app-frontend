@@ -33,13 +33,16 @@ import {
 } from "@/components/ui/table";
 import { User } from "./types/User.types";
 
-
 export type Props = {
   data: User[];
   handleSelect: (user: User) => void;
-}
+  unread: Record<string, number>; // 🔴 dodane
+};
 
-export const columns = (handleSelect: (user: User) => void): ColumnDef<User>[] => [
+export const columns = (
+  handleSelect: (user: User) => void,
+  unread: Record<string, number>
+): ColumnDef<User>[] => [
   {
     accessorKey: "username",
     header: "Nazwa użytkownika",
@@ -53,7 +56,9 @@ export const columns = (handleSelect: (user: User) => void): ColumnDef<User>[] =
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() =>
+            column.toggleSorting(column.getIsSorted() === "asc")
+          }
         >
           Email
           <ArrowUpDown />
@@ -72,17 +77,31 @@ export const columns = (handleSelect: (user: User) => void): ColumnDef<User>[] =
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {  
+    cell: ({ row }) => {
+      const user = row.original;
+      const unreadCount = unread[user.email] || 0;
+
       return (
-            <Button onClick={() =>handleSelect(row.original)} variant="ghost" className="h-8 w-8 p-0">
-              <MessageCircle/> Rozpocznij czat
-            </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={() => handleSelect(user)}
+            variant="ghost"
+            className="h-8 px-2 flex items-center gap-1"
+          >
+            <MessageCircle size={16} /> Czat
+          </Button>
+          {unreadCount > 0 && (
+            <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
+              {unreadCount}
+            </span>
+          )}
+        </div>
       );
     },
   },
 ];
 
-export function RecipientsTable({data = [], handleSelect}: Props) {
+export function RecipientsTable({ data = [], handleSelect, unread }: Props) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -93,7 +112,7 @@ export function RecipientsTable({data = [], handleSelect}: Props) {
 
   const table = useReactTable({
     data,
-    columns: columns(handleSelect),
+    columns: columns(handleSelect, unread), // 🔴 przekazujemy unread
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -188,7 +207,7 @@ export function RecipientsTable({data = [], handleSelect}: Props) {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={table.getAllColumns().length}
                   className="h-24 text-center"
                 >
                   No results.

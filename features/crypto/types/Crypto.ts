@@ -1,6 +1,7 @@
 export interface Crypto {
   symbol: string,
   name: string,
+  id: string,
   quote: {
     USD: {
       price: number,
